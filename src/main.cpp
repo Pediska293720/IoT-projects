@@ -13,7 +13,6 @@
 int PASSWORD[4] = {1, 2, 3, 4};
 int INPUT_CODE[4];
 int idx = 0;
-unsigned long start_time = 0;
 bool message_print = false;
 
 void blink(){
