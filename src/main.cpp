@@ -1,13 +1,14 @@
 #include <Arduino.h>
 
-#define BUTTON_RED_1 12
-#define BUTTON_GREEN_2 14
-#define BUTTON_BLUE_3 27
-#define BUTTON_YELLOW_4 26
+//for real microcontroller
+#define BUTTON_RED_1 14
+#define BUTTON_GREEN_2 27
+#define BUTTON_BLUE_3 26
+#define BUTTON_YELLOW_4 25
 
-#define LED 19
+#define LED 2
 #define RELAY 23
-#define LDR 13
+#define LDR 33
 
 int PASSWORD[4] = {1, 2, 3, 4};
 int INPUT_CODE[4];
@@ -41,21 +42,19 @@ bool CheckingCode(){
 }
 
 void setup() {
-  Serial.begin(115200);
-  pinMode(BUTTON_RED_1, INPUT_PULLDOWN);
-  pinMode(BUTTON_GREEN_2, INPUT_PULLDOWN);
-  pinMode(BUTTON_BLUE_3, INPUT_PULLDOWN);
-  pinMode(BUTTON_YELLOW_4, INPUT_PULLDOWN);
+  Serial.begin(9600);
+  pinMode(BUTTON_RED_1, INPUT_PULLUP);
+  pinMode(BUTTON_GREEN_2, INPUT_PULLUP);
+  pinMode(BUTTON_BLUE_3, INPUT_PULLUP);
+  pinMode(BUTTON_YELLOW_4, INPUT_PULLUP);
 
   pinMode(LED, OUTPUT);
   pinMode(RELAY, OUTPUT);
-  pinMode(LDR, INPUT);
   }
 
 void loop() {
   int light_level = analogRead(LDR);
-  
-  if (light_level < 300){
+  if (light_level < 1000){
     state_door = DAY;
   }
   
@@ -66,6 +65,7 @@ void loop() {
       digitalWrite(RELAY, LOW);
       delay(2000);
       state_door = CLOSE;
+      message_print = false;
       break;
 
     case CLOSE:
@@ -77,7 +77,7 @@ void loop() {
         message_print = true;
       }
 
-      if (digitalRead(BUTTON_RED_1) == 1){
+      if (digitalRead(BUTTON_RED_1) == 0){
         Serial.println("RED press");
         INPUT_CODE[idx] = 1;
         idx++;
@@ -85,19 +85,19 @@ void loop() {
       }
   
 
-      else if (digitalRead(BUTTON_GREEN_2) == 1){
+      else if (digitalRead(BUTTON_GREEN_2) == 0){
         Serial.println("GREEN press");
         INPUT_CODE[idx] = 2;
         idx++;
         delay(500);
       }
-      else if (digitalRead(BUTTON_BLUE_3) == 1){
+      else if (digitalRead(BUTTON_BLUE_3) == 0){
         Serial.println("BLUE press");
         INPUT_CODE[idx] = 3;
         idx++;
         delay(500);
       }
-      else if (digitalRead(BUTTON_YELLOW_4) == 1){
+      else if (digitalRead(BUTTON_YELLOW_4) == 0){
         Serial.println("YELLOW press");
         INPUT_CODE[idx] = 4;
         idx++;
